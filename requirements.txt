@@ -1,0 +1,17 @@
+streamlit
+PyPDF2
+google-generativeai
+mistralai
+fpdf
+yagmail
+bcrypt
+python-dotenv
+PyYAML
+plotly
+pandas
+numpy
+requests
+beautifulsoup4
+selenium
+schedule
+openai
