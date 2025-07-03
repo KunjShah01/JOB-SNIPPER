@@ -13,7 +13,16 @@ from datetime import datetime
 import logging
 
 # Add the parent directory to the Python path
-sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+# Import quantum design system and components
+from ui.core.design_system import (
+    apply_quantum_design, create_hero, glass_card, metric_card, 
+    status_badge, gradient_card, loading_spinner, QuantumDesignSystem
+)
+from ui.components.quantum_components import (
+    quantum_header, quantum_card, quantum_metrics, quantum_progress,
+    quantum_status, quantum_timeline, QuantumComponents
+)
+from ui.pages.quantum_resume_analysis import render_quantum_resume_analysis
 
 # Import quantum design system
 from ui.core.design_system import (
@@ -249,7 +258,8 @@ class QuantumJobSniperApp:
             content="""
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 2rem; margin-top: 1rem;">
                 <div style="text-align: center;">
-                    <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
+            elif current_page == "resume_analysis":
+                render_quantum_resume_analysis()
                     <h4 style="color: white; margin: 0;">Neural Networks</h4>
             elif current_page == "resume_analysis":
                 render_quantum_resume_analysis()
