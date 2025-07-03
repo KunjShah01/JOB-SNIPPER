@@ -20,7 +20,7 @@ from agents.skill_recommendation_agent import SkillRecommendationAgent
 
 # from agents.agent_fallback import AgentFallbackHandler  # Unused import removed
 from utils.pdf_reader import extract_text_from_pdf
-from utils.sqlite_logger import SQLiteLogger
+from utils.sqlite_logger import save_to_db
 from utils.exporter import PDFExporter, EmailSender
 from utils.config import load_config
 
@@ -532,8 +532,14 @@ if mode == "🎯 Resume Analysis":
                 with col3:
                     if st.button("💾 Save to Database"):
                         try:
-                            logger_db = SQLiteLogger()
-                            logger_db.log_analysis(analysis, uploaded_file.name)
+                            parsed_data = analysis.get("parsed_data", {})
+                            match_result = {
+                                "match_percent": analysis.get("overall_score", 0),
+                                "job_title": analysis.get("target_job", ""),
+                                "feedback_summary": ", ".join(analysis.get("recommendations", [])),
+                                "job_roles": analysis.get("job_suggestions", []),
+                            }
+                            save_to_db(parsed_data, match_result)
                             st.success("✅ Analysis saved to database!")
                         except Exception as e:
                             st.error(f"Error saving to database: {str(e)}")
