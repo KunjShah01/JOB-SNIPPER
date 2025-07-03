@@ -17,7 +17,11 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import quantum design system
 from ui.core.design_system import (
-    apply_quantum_design, create_hero, glass_card, metric_card, 
+from ui.components.quantum_components import (
+    quantum_header, quantum_card, quantum_metrics, quantum_progress,
+    quantum_status, quantum_timeline, QuantumComponents
+)
+from ui.pages.quantum_resume_analysis import render_quantum_resume_analysis
     status_badge, gradient_card, loading_spinner, QuantumDesignSystem
 )
 
@@ -247,7 +251,8 @@ class QuantumJobSniperApp:
                 <div style="text-align: center;">
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">🧠</div>
                     <h4 style="color: white; margin: 0;">Neural Networks</h4>
-                    <p style="color: rgba(255,255,255,0.8); margin: 0.5rem 0 0 0;">Advanced deep learning models</p>
+            elif current_page == "resume_analysis":
+                render_quantum_resume_analysis()
                 </div>
                 <div style="text-align: center;">
                     <div style="font-size: 2rem; margin-bottom: 0.5rem;">⚡</div>
