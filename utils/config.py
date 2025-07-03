@@ -93,3 +93,14 @@ __all__ = [
     "AI_PROVIDER",
     "update_email_config",
 ]
+# Add Firecrawl configuration
+FIRECRAWL_API_KEY = os.getenv("FIRECRAWL_API_KEY", "")
+
+# Add new feature flags
+FEATURES = {
+    "resume_builder": True,
+    "company_research": True,
+    "advanced_interview_prep": True,
+    "salary_insights": True,
+    "web_scraping": bool(FIRECRAWL_API_KEY)
+}
