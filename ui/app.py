@@ -21,8 +21,8 @@ from agents.skill_recommendation_agent import SkillRecommendationAgent
 # from agents.agent_fallback import AgentFallbackHandler  # Unused import removed
 from utils.pdf_reader import extract_text_from_pdf
 from utils.sqlite_logger import save_to_db
-from utils.exporter import PDFExporter, EmailSender
-from utils.config import load_config
+from utils.exporter import export_to_pdf, send_email, send_email_fallback
+from utils.config import FEATURES, EMAIL_AVAILABLE
 
 # Import new enhanced agents
 try:
@@ -47,7 +47,7 @@ st.set_page_config(
 )
 
 # Load configuration
-config = load_config()
+# config = load_config()
 
 # Initialize session state
 if "user_session" not in st.session_state:
@@ -278,18 +278,11 @@ if mode == "🎯 Resume Analysis":
                         # Initialize controller agent
                         controller = ControllerAgent()
 
-                        # Prepare analysis data
-                        analysis_data = {
-                            "resume_text": resume_text,
-                            "target_job": target_job_title,
-                            "analysis_depth": analysis_depth,
-                        }
-
                         # Perform analysis
-                        analysis_result = controller.run(json.dumps(analysis_data))
-
+                        analysis_result = controller.run(resume_text, target_job_title)
+                        
                         # Store results in session state
-                        st.session_state.resume_analysis = json.loads(analysis_result)
+                        st.session_state.resume_analysis = analysis_result
 
                         st.success("✅ Resume analysis completed!")
 
@@ -501,8 +494,7 @@ if mode == "🎯 Resume Analysis":
                     if st.button("📄 Export PDF Report"):
                         try:
                             # Generate PDF report
-                            exporter = PDFExporter()
-                            pdf_path = exporter.export_analysis_report(
+                            pdf_path = export_to_pdf(
                                 analysis, uploaded_file.name
                             )
 
@@ -521,10 +513,10 @@ if mode == "🎯 Resume Analysis":
                         email = st.text_input("Enter your email address:")
                         if email and st.button("Send Email"):
                             try:
-                                email_sender = EmailSender()
-                                email_sender.send_analysis_report(
-                                    email, analysis, uploaded_file.name
-                                )
+                                if EMAIL_AVAILABLE:
+                                    send_email(email, f"resume_analysis_{uploaded_file.name}.pdf")
+                                else:
+                                    send_email_fallback(email, f"resume_analysis_{uploaded_file.name}.pdf")
                                 st.success("✅ Report sent successfully!")
                             except Exception as e:
                                 st.error(f"Error sending email: {str(e)}")
